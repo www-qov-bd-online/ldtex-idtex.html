@@ -34,7 +34,7 @@
         width: 100%;
         overflow-x: auto;
         background-color: #ffffff;
-        padding: 10px;
+        padding: 10px 0;
         -webkit-overflow-scrolling: touch;
       }
 
@@ -46,9 +46,8 @@
         color: #000000;
         font-size: 13px;
         line-height: 1.4;
-        border: 1px dashed #7eb382;
-        border-radius: 6px;
-        padding: 10px;
+        border: none;
+        padding: 0;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -65,12 +64,14 @@
       }
       .btn { background-color: #337ab7; color: #ffffff; border: 1px solid #2e6da4; padding: 6px 18px; font-size: 14px; font-weight: bold; border-radius: 4px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
 
-      /* রসিদ ছবির স্টাইল */
+      /* রসিদ ছবির ব্রাইটনেস ও সাদা ব্যাকগ্রাউন্ড সমন্বয় */
       .receipt-img {
         width: 100%;
         height: auto;
         display: block;
-        border-radius: 4px;
+        background-color: #ffffff;
+        /* ছবির ধূসর ব্যাকগ্রাউন্ড পরিষ্কার ও উজ্জ্বল করার ফিল্টার */
+        filter: contrast(115%) brightness(108%);
       }
 
       .error-msg {
@@ -130,7 +131,7 @@
     <div class="footer-gradient">
     </div>
     <script>
-    // সংখ্যাকে বাংলায় রূপান্তর করার ফাংশন
+    // সংখ্যাকে বাংলায় রূপান্তর করার ফাংশন
     function toBanglaNum(num) {
       const banglaDigits = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
       return num.toString().replace(/\d/g, d => banglaDigits[d]);
@@ -150,7 +151,7 @@
       let banglaYear = month < 3 || (month === 3 && day < 14) ? year - 594 : year - 593;
       let banglaMonthIndex, banglaDay;
 
-      // মাস অনুযায়ী দিন গণনা
+      // মাস অনুযায়ী দিন গণনা
       if (month === 0) { // January
         if (day <= 13) { banglaMonthIndex = 8; banglaDay = day + 17; }
         else { banglaMonthIndex = 9; banglaDay = day - 13; }
@@ -208,7 +209,7 @@
         
         const banglaFullDate = getBanglaDate(today);
         
-        // সরকারি ওয়েবসাইটের ফরম্যাটে: বাংলা তারিখ / ইংরেজি তারিখ (বাংলায়)
+        // সরকারি ওয়েবসাইটের ফরম্যাটে: বাংলা তারিখ / ইংরেজি তারিখ (বাংলায়)
         document.getElementById('live-date').innerText = `${banglaFullDate} / ${dayBn} ${monthBn} ${yearBn}`;
       }
     }
