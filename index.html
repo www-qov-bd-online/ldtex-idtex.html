@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="bn">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>ভূমি উন্নয়ন কর - রসিদ যাচাই</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+      * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'SolaimanLipi', Arial, sans-serif; }
+      body { background-color: #ffffff; min-height: 100vh; overflow-x: hidden; }
+
+      /* Green Top Header */
+      .top-banner { background-color: #006a4e; color: #ffffff; text-align: center; padding: 6px 10px; font-size: 13px; font-weight: bold; }
+      
+      /* Navbar Area */
+      .navbar { background-color: #ffffff; display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; border-bottom: 1px solid #e0e0e0; }
+      .brand-section { display: flex; align-items: center; gap: 8px; }
+      .logo-box { background-color: #e6a100; color: #ffffff; width: 36px; height: 36px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: bold; }
+      .brand-title { font-size: 18px; font-weight: bold; color: #222222; }
+      .nav-controls { display: flex; align-items: center; gap: 6px; }
+      .lang-toggle { border: 1px solid #006a4e; border-radius: 4px; overflow: hidden; display: flex; }
+      .lang-btn { padding: 3px 7px; font-size: 12px; font-weight: bold; cursor: pointer; }
+      .lang-btn.active { background-color: #006a4e; color: #ffffff; }
+      .lang-btn.inactive { background-color: #ffffff; color: #006a4e; }
+      .login-btn { background-color: #006a4e; color: #ffffff; border: none; padding: 5px 10px; font-size: 12px; font-weight: bold; border-radius: 12px; display: flex; align-items: center; gap: 3px; }
+
+      /* Hamburger Line */
+      .menu-bar { background-color: #ffffff; padding: 8px 12px; border-bottom: 1px solid #e0e0e0; }
+      .hamburger-icon { width: 20px; height: 14px; display: flex; flex-direction: column; justify-content: space-between; }
+      .hamburger-icon span { display: block; height: 2px; background-color: #006a4e; border-radius: 1px; }
+
+      /* Full Width Horizontal Scroll Wrapper */
+      .receipt-wrapper {
+        width: 100%;
+        overflow-x: auto;
+        background-color: #ffffff;
+        padding: 10px;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      /* Fixed Paper Width matching original site */
+      .receipt-paper {
+        width: 780px;
+        margin: 0 auto;
+        background: #ffffff;
+        color: #000000;
+        font-size: 13px;
+        line-height: 1.4;
+        border: 1px dashed #7eb382;
+        border-radius: 6px;
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      /* Action Toolbar */
+      .action-toolbar {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        padding: 10px;
+        background: #f0f0f0;
+        border-bottom: 1px solid #ccc;
+      }
+      .btn { background-color: #337ab7; color: #ffffff; border: 1px solid #2e6da4; padding: 6px 18px; font-size: 14px; font-weight: bold; border-radius: 4px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
+
+      /* রসিদ ছবির স্টাইল */
+      .receipt-img {
+        width: 100%;
+        height: auto;
+        display: block;
+        border-radius: 4px;
+      }
+
+      .error-msg {
+        color: #d32f2f;
+        padding: 40px;
+        font-weight: bold;
+        text-align: center;
+        font-size: 16px;
+      }
+
+      .footer-gradient { height: 35px; background: linear-gradient(to top, #006a4e, #ffffff); width: 100%; margin-top: 20px; }
+
+      @media print {
+        .top-banner, .navbar, .menu-bar, .action-toolbar, .footer-gradient, .no-print { display: none !important; }
+        body { background: #fff; padding: 0; }
+        .receipt-wrapper { overflow: visible; padding: 0; }
+        .receipt-paper { width: 100%; border: none; padding: 0; }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Controls Area (Only Print Button) -->
+    <div class="action-toolbar no-print">
+      <button class="btn" onclick="window.print()">🖨️ প্রিন্ট</button>
+    </div>
+    <!-- Government Website Top Section -->
+    <div class="top-banner" id="live-date">
+    </div>
+    <div class="navbar">
+      <div class="brand-section">
+        <div class="logo-box">৳</div>
+        <div class="brand-title" id="brandTitle">ভূমি উন্নয়ন কর</div>
+      </div>
+      <div class="nav-controls">
+        <div class="lang-toggle">
+          <span class="lang-btn active" id="btnBn" onclick="setLanguage('bn')">বাং</span>
+          <span class="lang-btn inactive" id="btnEn" onclick="setLanguage('en')">EN</span>
+        </div>
+        <button class="login-btn" id="loginText">
+          লগইন <span>▼</span>
+        </button>
+      </div>
+    </div>
+    <div class="menu-bar">
+      <div class="hamburger-icon">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+    <!-- Smooth Horizontal Scrolling Container -->
+    <div class="receipt-wrapper">
+      <div class="receipt-paper" id="receipt">
+        <!-- ডায়নামিক রসিদ ছবি এখানে লোড হবে -->
+      </div>
+    </div>
+    <div class="footer-gradient">
+    </div>
+    <script>
+    // সংখ্যাকে বাংলায় রূপান্তর করার ফাংশন
+    function toBanglaNum(num) {
+      const banglaDigits = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
+      return num.toString().replace(/\d/g, d => banglaDigits[d]);
+    }
+
+    // ইংরেজি তারিখ থেকে বাংলা তারিখ ও মাস বের করার লজিক (বাংলাদেশ সরকার স্বীকৃত ক্যালেন্ডার)
+    function getBanglaDate(date) {
+      const year = date.getFullYear();
+      const month = date.getMonth();
+      const day = date.getDate();
+
+      // লিপ ইয়ার চেক
+      const isLeapYear = (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0);
+      
+      const banglaMonths = ['বৈশাখ', 'জ্যৈষ্ঠ', 'আষাঢ়', 'শ্রাবণ', 'ভাদ্র', 'আশ্বিন', 'কার্তিক', 'অগ্রহায়ণ', 'পৌষ', 'মাঘ', 'ফাল্গুন', 'চৈত্র'];
+      
+      let banglaYear = month < 3 || (month === 3 && day < 14) ? year - 594 : year - 593;
+      let banglaMonthIndex, banglaDay;
+
+      // মাস অনুযায়ী দিন গণনা
+      if (month === 0) { // January
+        if (day <= 13) { banglaMonthIndex = 8; banglaDay = day + 17; }
+        else { banglaMonthIndex = 9; banglaDay = day - 13; }
+      } else if (month === 1) { // February
+        if (day <= 12) { banglaMonthIndex = 9; banglaDay = day + 18; }
+        else { banglaMonthIndex = 10; banglaDay = day - 12; }
+      } else if (month === 2) { // March
+        const febDays = isLeapYear ? 29 : 28;
+        if (day <= 14) { banglaMonthIndex = 10; banglaDay = day + (febDays - 12); }
+        else { banglaMonthIndex = 11; banglaDay = day - 14; }
+      } else if (month === 3) { // April
+        if (day <= 13) { banglaMonthIndex = 11; banglaDay = day + 17; }
+        else { banglaMonthIndex = 0; banglaDay = day - 13; }
+      } else if (month === 4) { // May
+        if (day <= 14) { banglaMonthIndex = 0; banglaDay = day + 17; }
+        else { banglaMonthIndex = 1; banglaDay = day - 14; }
+      } else if (month === 5) { // June
+        if (day <= 14) { banglaMonthIndex = 1; banglaDay = day + 17; }
+        else { banglaMonthIndex = 2; banglaDay = day - 14; }
+      } else if (month === 6) { // July
+        if (day <= 15) { banglaMonthIndex = 2; banglaDay = day + 16; }
+        else { banglaMonthIndex = 3; banglaDay = day - 15; }
+      } else if (month === 7) { // August
+        if (day <= 16) { banglaMonthIndex = 3; banglaDay = day + 16; }
+        else { banglaMonthIndex = 4; banglaDay = day - 16; }
+      } else if (month === 8) { // September
+        if (day <= 15) { banglaMonthIndex = 4; banglaDay = day + 15; }
+        else { banglaMonthIndex = 5; banglaDay = day - 15; }
+      } else if (month === 9) { // October
+        if (day <= 15) { banglaMonthIndex = 5; banglaDay = day + 15; }
+        else { banglaMonthIndex = 6; banglaDay = day - 15; }
+      } else if (month === 10) { // November
+        if (day <= 14) { banglaMonthIndex = 6; banglaDay = day + 16; }
+        else { banglaMonthIndex = 7; banglaDay = day - 14; }
+      } else if (month === 11) { // December
+        if (day <= 14) { banglaMonthIndex = 7; banglaDay = day + 16; }
+        else { banglaMonthIndex = 8; banglaDay = day - 14; }
+      }
+
+      return `${toBanglaNum(banglaDay)} ${banglaMonths[banglaMonthIndex]} ${toBanglaNum(banglaYear)}`;
+    }
+
+    // বর্তমান লাইভ তারিখ অটোমেটিক সেট করার ফাংশন
+    function updateDates(lang) {
+      const today = new Date();
+
+      if (lang === 'en') {
+        const options = { day: 'numeric', month: 'long', year: 'numeric' };
+        document.getElementById('live-date').innerText = today.toLocaleDateString('en-US', options);
+      } else {
+        const englishMonthsBangla = ['জানুয়ারি', 'ফেব্রুয়ারি', 'মার্চ', 'এপ্রিল', 'মে', 'জুন', 'জুলাই', 'আগস্ট', 'সেপ্টেম্বর', 'অক্টোবর', 'নভেম্বর', 'ডিসেম্বর'];
+        const dayBn = toBanglaNum(today.getDate());
+        const monthBn = englishMonthsBangla[today.getMonth()];
+        const yearBn = toBanglaNum(today.getFullYear());
+        
+        const banglaFullDate = getBanglaDate(today);
+        
+        // সরকারি ওয়েবসাইটের ফরম্যাটে: বাংলা তারিখ / ইংরেজি তারিখ (বাংলায়)
+        document.getElementById('live-date').innerText = `${banglaFullDate} / ${dayBn} ${monthBn} ${yearBn}`;
+      }
+    }
+
+    // ভাষা পরিবর্তন করার ফাংশন (বাংলা / ইংরেজি)
+    function setLanguage(lang) {
+      const btnBn = document.getElementById('btnBn');
+      const btnEn = document.getElementById('btnEn');
+      const brandTitle = document.getElementById('brandTitle');
+      const loginText = document.getElementById('loginText');
+
+      if (lang === 'en') {
+        btnEn.className = 'lang-btn active';
+        btnBn.className = 'lang-btn inactive';
+        brandTitle.innerText = 'Land Development Tax';
+        loginText.innerHTML = 'Login <span>▼</span>';
+        updateDates('en');
+      } else {
+        btnBn.className = 'lang-btn active';
+        btnEn.className = 'lang-btn inactive';
+        brandTitle.innerText = 'ভূমি উন্নয়ন কর';
+        loginText.innerHTML = 'লগইন <span>▼</span>';
+        updateDates('bn');
+      }
+    }
+
+    updateDates('bn');
+
+    // ইউআরএল থেকে ফাইল নাম রিড করে রসিদ লোড করার স্ক্রিপ্ট
+    const urlParams = new URLSearchParams(window.location.search);
+    let requestedFile = urlParams.get('file');
+    const receiptBox = document.getElementById('receipt');
+
+    if (requestedFile) {
+      requestedFile = requestedFile.trim();
+      
+      if (!requestedFile.includes('.')) {
+        if (/^\d+$/.test(requestedFile)) {
+          requestedFile = `dakhila-${requestedFile}.jpg`;
+        } else {
+          requestedFile = `${requestedFile}.jpg`;
+        }
+      }
+      
+      const fileUrl = `receipts/${requestedFile}`;
+      receiptBox.innerHTML = `<img src="${fileUrl}" alt="Land Tax Receipt" class="receipt-img" id="receiptImg">`;
+      
+      setTimeout(() => {
+        const imgElement = document.getElementById('receiptImg');
+        if (imgElement) {
+          imgElement.onerror = function() {
+            receiptBox.innerHTML = `<div class="error-msg">⚠️ রসিদ পাওয়া যায়নি / Receipt not found<br><br><small>${requestedFile}</small></div>`;
+          };
+        }
+      }, 100);
+
+    } else {
+      receiptBox.innerHTML = `<div class="error-msg">⚠️ দুঃখিত, কোনো রসিদ পাওয়া যায়নি। সঠিক লিংক ব্যবহার করুন (যেমন: ?file=1 বা ?file=dakhila-102)।</div>`;
+    }
+  </script>
+  </body>
+</html>
