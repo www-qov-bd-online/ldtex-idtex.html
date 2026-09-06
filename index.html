@@ -34,7 +34,7 @@
         width: 100%;
         overflow-x: auto;
         background-color: #ffffff;
-        padding: 10px 0;
+        padding: 0;
         -webkit-overflow-scrolling: touch;
       }
 
@@ -64,14 +64,15 @@
       }
       .btn { background-color: #337ab7; color: #ffffff; border: 1px solid #2e6da4; padding: 6px 18px; font-size: 14px; font-weight: bold; border-radius: 4px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
 
-      /* রসিদ ছবির ব্রাইটনেস ও সাদা ব্যাকগ্রাউন্ড সমন্বয় */
+      /* রসিদ ছবির অতিরিক্ত ব্যাকগ্রাউন্ড রিমুভ ও ব্রাইটনেস কালার অ্যাডজাস্টমেন্ট */
       .receipt-img {
         width: 100%;
         height: auto;
         display: block;
         background-color: #ffffff;
-        /* ছবির ধূসর ব্যাকগ্রাউন্ড পরিষ্কার ও উজ্জ্বল করার ফিল্টার */
-        filter: contrast(115%) brightness(108%);
+        /* অতিরিক্ত কন্ট্রাস্ট ও লাইটিং ফিল্টার দিয়ে ব্যাকগ্রাউন্ডকে সাদা করার চেষ্টা */
+        filter: contrast(130%) brightness(115%) grayscale(100%);
+        mix-blend-mode: multiply;
       }
 
       .error-msg {
@@ -89,6 +90,7 @@
         body { background: #fff; padding: 0; }
         .receipt-wrapper { overflow: visible; padding: 0; }
         .receipt-paper { width: 100%; border: none; padding: 0; }
+        .receipt-img { filter: none; mix-blend-mode: normal; }
       }
     </style>
   </head>
